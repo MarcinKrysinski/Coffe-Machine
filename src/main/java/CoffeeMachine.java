@@ -42,9 +42,14 @@ public class CoffeeMachine {
 
         ICoffeMachinePrograms programs = new Programs();
 
-        programs.info();
-        programs.menu();
-        programs.info();
+
+
+        do{
+
+            programs.menu();
+
+        }while(CoffeeMachineResources.exit);
+
 
 
 

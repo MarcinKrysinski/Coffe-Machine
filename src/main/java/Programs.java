@@ -1,6 +1,6 @@
 import java.util.Scanner;
 
-public class Programs implements ICoffeMachinePrograms {
+public class Programs<T> implements ICoffeMachinePrograms {
 
     Scanner scanner = new Scanner(System.in);
     Coffees coffee = new Coffees();
@@ -20,10 +20,10 @@ public class Programs implements ICoffeMachinePrograms {
     }
 
     @Override
-    public void menu() {
+    public boolean menu() {
 
 
-        System.out.println("Write action (buy, fill, take): ");
+        System.out.println("Write action (buy, fill, take, remaining, exit): ");
         String action = scanner.nextLine();
 
         switch (action){
@@ -37,8 +37,15 @@ public class Programs implements ICoffeMachinePrograms {
             case "take":
                 take();
                 break;
+            case "remaining":
+                info();
+                break;
+            case "exit":
+                exit();
+                break;
         }
 
+        return CoffeeMachineResources.exit;
     }
 
     @Override
@@ -51,21 +58,42 @@ public class Programs implements ICoffeMachinePrograms {
 
 
 
-        System.out.println("What do you want to buy? 1 - espresso, 2 - latte, 3 - cappuccino: ");
-        int selectedCoffe =  scanner.nextInt();
+        System.out.println("What do you want to buy? 1 - espresso, 2 - latte, 3 - cappuccino, back - to main menu: ");
+        String selectedCoffee =  scanner.nextLine();
 
-        switch(selectedCoffe){
+        switch(selectedCoffee){
 
-            case 1:
-                coffee.esspresso();
+            case "1":
+                boolean x1 = conditional(Coffees.espressoWater, Coffees.espressoCoffeeBeans);
+                if(x1) {
+                    coffee.esspresso();
+                }else{
+                    break;
+                }
                 break;
 
-            case 2:
-                coffee.latte();
+
+            case "2":
+                boolean x2 = conditional(Coffees.latteWater,Coffees.latteMilk, Coffees.latteCoffeeBeans);
+                if(x2) {
+                    coffee.latte();
+                }else{
+                    break;
+                }
                 break;
 
-            case 3:
-                coffee.cappuccino();
+
+            case "3":
+                boolean x3 = conditional(Coffees.cappuccinoWater, Coffees.cappuccinoMilk, Coffees.cappuccinoCoffeeBeans);
+                if(x3) {
+                    coffee.cappuccino();
+                }else{
+                    break;
+                }
+                break;
+
+            case "back":
+                menu();
                 break;
         }
 
@@ -95,8 +123,51 @@ public class Programs implements ICoffeMachinePrograms {
     @Override
     public void take() {
 
-        System.out.println("I gave you " + coffee.money);
+        System.out.println("I gave you $" + coffee.money);
         coffee.moneyConsume(coffee.money);
 
     }
+
+    @Override
+    public boolean exit() {
+        return CoffeeMachineResources.exit = false;
+    }
+
+
+    @Override
+    public boolean conditional(int WATER_FOR_ONE_CUP, int BEANS_FOR_ONE_CUP){
+        int maximumCups = Math.min(coffee.water / WATER_FOR_ONE_CUP, coffee.coffeeBeans / BEANS_FOR_ONE_CUP);
+//
+        if (maximumCups >= 1) {
+            System.out.println("Yes, I can make that amount of coffee");
+            return true;
+//        } else if (maximumCups > 1) {
+//            System.out.println("Yes, I can make that amount of coffee (and even " +
+//                    (maximumCups - 1) + " more than that)");
+        } else {
+            System.out.println("No, I can make only " + maximumCups + " cup(s) of coffee");
+            return false;
+        }
+    }
+
+
+    @Override
+    public boolean conditional(int WATER_FOR_ONE_CUP, int MILK_FOR_ONE_CUP, int BEANS_FOR_ONE_CUP){
+        int maximumCups = Math.min(Math.min(coffee.water / WATER_FOR_ONE_CUP, coffee.milk / MILK_FOR_ONE_CUP), coffee.coffeeBeans / BEANS_FOR_ONE_CUP);
+//
+        if (maximumCups >= 1) {
+            System.out.println("Yes, I can make that amount of coffee");
+            return true;
+//        } else if (maximumCups > 1) {
+//            System.out.println("Yes, I can make that amount of coffee (and even " +
+//                    (maximumCups - 1) + " more than that)");
+        } else {
+            System.out.println("No, I can make only " + maximumCups + " cup(s) of coffee");
+            return false;
+        }
+    }
+
+
+
+
 }

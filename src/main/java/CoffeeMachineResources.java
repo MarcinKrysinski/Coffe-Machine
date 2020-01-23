@@ -1,20 +1,24 @@
 public class CoffeeMachineResources {
 
-    int water = 1200;
+    int water = 400;
     int milk = 540;
     int coffeeBeans= 120;
     int disposableCups = 9;
     int money = 550;
+    static boolean exit = true;
 
-    public CoffeeMachineResources() {
+
+
+    CoffeeMachineResources() {
     }
 
-    public CoffeeMachineResources(int water, int milk, int coffeBeans, int disposableCups, int money) {
+    public CoffeeMachineResources(int water, int milk, int coffeBeans, int disposableCups, int money, boolean exit) {
         this.water = water;
         this.milk = milk;
         this.coffeeBeans = coffeBeans;
         this.disposableCups = disposableCups;
         this.money = money;
+        CoffeeMachineResources.exit = false;
     }
 
     public void waterConsume(int minusWater){
