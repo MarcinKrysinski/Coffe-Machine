@@ -2,8 +2,8 @@ import java.util.Scanner;
 
 public class Programs<T> implements ICoffeMachinePrograms {
 
-    Scanner scanner = new Scanner(System.in);
-    Coffees coffee = new Coffees();
+    private Scanner scanner = new Scanner(System.in);
+    private Coffees coffee = new Coffees();
 
 
     @Override
@@ -19,9 +19,9 @@ public class Programs<T> implements ICoffeMachinePrograms {
 
     }
 
-    @Override
-    public boolean menu() {
 
+    @Override
+    public void menu() {
 
         System.out.println("Write action (buy, fill, take, remaining, exit): ");
         String action = scanner.nextLine();
@@ -45,18 +45,11 @@ public class Programs<T> implements ICoffeMachinePrograms {
                 break;
         }
 
-        return CoffeeMachineResources.exit;
     }
+
 
     @Override
     public void buy() {
-
-
-//        System.out.println(coffee.water);
-//        System.out.println(coffee.coffeeBeans);
-//        System.out.println(coffee.money);
-
-
 
         System.out.println("What do you want to buy? 1 - espresso, 2 - latte, 3 - cappuccino, back - to main menu: ");
         String selectedCoffee =  scanner.nextLine();
@@ -64,9 +57,9 @@ public class Programs<T> implements ICoffeMachinePrograms {
         switch(selectedCoffee){
 
             case "1":
-                boolean x1 = conditional(Coffees.espressoWater, Coffees.espressoCoffeeBeans);
+                boolean x1 = conditional(Coffees.espressoWater, Coffees.espressoCoffeeBeans, Coffees.cupsConsume);
                 if(x1) {
-                    coffee.esspresso();
+                    coffee.espresso();
                 }else{
                     break;
                 }
@@ -74,7 +67,7 @@ public class Programs<T> implements ICoffeMachinePrograms {
 
 
             case "2":
-                boolean x2 = conditional(Coffees.latteWater,Coffees.latteMilk, Coffees.latteCoffeeBeans);
+                boolean x2 = conditional(Coffees.latteWater,Coffees.latteMilk, Coffees.latteCoffeeBeans, Coffees.cupsConsume);
                 if(x2) {
                     coffee.latte();
                 }else{
@@ -84,7 +77,7 @@ public class Programs<T> implements ICoffeMachinePrograms {
 
 
             case "3":
-                boolean x3 = conditional(Coffees.cappuccinoWater, Coffees.cappuccinoMilk, Coffees.cappuccinoCoffeeBeans);
+                boolean x3 = conditional(Coffees.cappuccinoWater, Coffees.cappuccinoMilk, Coffees.cappuccinoCoffeeBeans, Coffees.cupsConsume);
                 if(x3) {
                     coffee.cappuccino();
                 }else{
@@ -98,6 +91,7 @@ public class Programs<T> implements ICoffeMachinePrograms {
         }
 
     }
+
 
     @Override
     public void fill() {
@@ -120,6 +114,7 @@ public class Programs<T> implements ICoffeMachinePrograms {
 
     }
 
+
     @Override
     public void take() {
 
@@ -128,22 +123,21 @@ public class Programs<T> implements ICoffeMachinePrograms {
 
     }
 
+
     @Override
-    public boolean exit() {
-        return CoffeeMachineResources.exit = false;
+    public void exit() {
+        CoffeeMachineResources.exit = false;
     }
 
 
     @Override
-    public boolean conditional(int WATER_FOR_ONE_CUP, int BEANS_FOR_ONE_CUP){
-        int maximumCups = Math.min(coffee.water / WATER_FOR_ONE_CUP, coffee.coffeeBeans / BEANS_FOR_ONE_CUP);
-//
+    public boolean conditional(int WATER_FOR_ONE_CUP, int BEANS_FOR_ONE_CUP, int CUPS_FOR_ONE_CUP){
+        int maximumCups = Math.min(Math.min(coffee.water / WATER_FOR_ONE_CUP, coffee.coffeeBeans / BEANS_FOR_ONE_CUP), coffee.disposableCups / CUPS_FOR_ONE_CUP);
+
         if (maximumCups >= 1) {
             System.out.println("Yes, I can make that amount of coffee");
             return true;
-//        } else if (maximumCups > 1) {
-//            System.out.println("Yes, I can make that amount of coffee (and even " +
-//                    (maximumCups - 1) + " more than that)");
+
         } else {
             System.out.println("No, I can make only " + maximumCups + " cup(s) of coffee");
             return false;
@@ -152,22 +146,17 @@ public class Programs<T> implements ICoffeMachinePrograms {
 
 
     @Override
-    public boolean conditional(int WATER_FOR_ONE_CUP, int MILK_FOR_ONE_CUP, int BEANS_FOR_ONE_CUP){
-        int maximumCups = Math.min(Math.min(coffee.water / WATER_FOR_ONE_CUP, coffee.milk / MILK_FOR_ONE_CUP), coffee.coffeeBeans / BEANS_FOR_ONE_CUP);
-//
+    public boolean conditional(int WATER_FOR_ONE_CUP, int MILK_FOR_ONE_CUP, int BEANS_FOR_ONE_CUP, int CUPS_FOR_ONE_CUP){
+        int maximumCups = Math.min(Math.min(coffee.water / WATER_FOR_ONE_CUP, coffee.milk / MILK_FOR_ONE_CUP), Math.min(coffee.coffeeBeans / BEANS_FOR_ONE_CUP, coffee.disposableCups / CUPS_FOR_ONE_CUP));
+
         if (maximumCups >= 1) {
             System.out.println("Yes, I can make that amount of coffee");
             return true;
-//        } else if (maximumCups > 1) {
-//            System.out.println("Yes, I can make that amount of coffee (and even " +
-//                    (maximumCups - 1) + " more than that)");
         } else {
             System.out.println("No, I can make only " + maximumCups + " cup(s) of coffee");
             return false;
         }
     }
-
-
 
 
 }
